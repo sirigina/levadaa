@@ -168,6 +168,71 @@ export function stampFor(overall) {
   return { text: 'ASSESSED', tone: 'stamp' }
 }
 
+// ========== Supplementary Characterological Evaluation ==========
+
+export const PERSONALITY_QUESTIONS = [
+  {
+    id: 'preparedness',
+    title: 'Preparedness Quotient',
+    prompt: 'When dining with a companion for the first time, the subject most commonly:',
+    options: [
+      { text: 'Arrives twelve minutes early and has already reviewed the menu.', value: 3 },
+      { text: 'Arrives on time and permits the companion to choose the wine.', value: 2 },
+      { text: 'Arrives late, but with a plausible anecdote.', value: 1 },
+      { text: 'Forgets the reservation entirely and suggests a kebab shop.', value: 0 },
+    ],
+  },
+  {
+    id: 'thermoregulation',
+    title: 'Nocturnal Thermoregulation Protocol',
+    prompt: 'In matters of shared bedding, the subject:',
+    options: [
+      { text: 'Maintains strict equitable distribution of the duvet at all times.', value: 3 },
+      { text: 'Surrenders the duvet willingly and sleeps in a dignified manner.', value: 2 },
+      { text: 'Engages in unconscious territorial expansion during REM sleep.', value: 1 },
+      { text: 'Sleeps atop the duvet, fully clothed, like a Napoleonic field marshal.', value: 0 },
+    ],
+  },
+  {
+    id: 'composure',
+    title: 'Crisis Composure Index',
+    prompt: 'Upon discovering a large spider in the bathtub, the subject:',
+    options: [
+      { text: 'Escorts the creature outside with a glass and postcard, narrating the process calmly.', value: 3 },
+      { text: 'Ignores the spider entirely, as one does.', value: 2 },
+      { text: 'Screams briefly, then pretends the scream was a cough.', value: 1 },
+      { text: 'Burns the house down and begins a new life in another city.', value: 0 },
+    ],
+  },
+  {
+    id: 'epistolary',
+    title: 'Epistolary Competence',
+    prompt: 'The subject\u2019s most recent text message to a romantic interest read:',
+    options: [
+      { text: 'A thoughtful inquiry about the recipient\u2019s day, with correct punctuation.', value: 3 },
+      { text: 'A single, well-chosen emoji conveying warmth without desperation.', value: 2 },
+      { text: '"u up?"', value: 1 },
+      { text: 'A forwarded meme from 2019.', value: 0 },
+    ],
+  },
+  {
+    id: 'olfactory',
+    title: 'Olfactory Self-Governance',
+    prompt: 'The subject\u2019s signature fragrance is best described as:',
+    options: [
+      { text: 'A deliberate selection, applied with restraint to the pulse points.', value: 3 },
+      { text: 'Soap. Simply soap. Clean, honest, unambiguous.', value: 2 },
+      { text: 'A cologne applied so liberally that it precedes the subject into rooms by several minutes.', value: 1 },
+      { text: 'The ambient scent of whatever room the subject most recently occupied.', value: 0 },
+    ],
+  },
+]
+
+export function computePersonalityBonus(answers) {
+  const sum = answers.reduce((a, b) => a + b, 0)
+  return Math.round((sum / 15) * 40)
+}
+
 export function generateCaseId() {
   const L = 'ABCDEFGHJKLMNPRSTVWXYZ'
   const pick = () => L[Math.floor(Math.random() * L.length)]

@@ -6,6 +6,8 @@ import {
   stampFor,
   generateCaseId,
   mulberry32,
+  PERSONALITY_QUESTIONS,
+  computePersonalityBonus,
 } from './theories.js'
 
 // ========== Persistence ==========
@@ -76,12 +78,14 @@ const downloadBlob = (blob, filename) => {
 
 // ========== Root component ==========
 export default function App() {
-  const [screen, setScreen] = useState('intro') // intro | upload | analysis | result
+  const [screen, setScreen] = useState('intro') // intro | upload | analysis | reveal | result
   const [caseId, setCaseId] = useState(null)
   const [photoDataUrl, setPhotoDataUrl] = useState(null)
   const [result, setResult] = useState(null) // { overall, scores, classification, theoryData }
   const [history, setHistory] = useState([])
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [personalityBonus, setPersonalityBonus] = useState(null)
+  const [originalOverall, setOriginalOverall] = useState(null)
 
   useEffect(() => {
     setHistory(loadHistory())
@@ -163,13 +167,45 @@ export default function App() {
       persistHistory(next)
       return next
     })
-    setScreen('result')
+    setScreen('reveal')
   }, [result, photoDataUrl, caseId])
+
+  const handleRevealComplete = useCallback(() => {
+    setScreen('result')
+  }, [])
+
+  const handleStartPersonality = () => setScreen('personality')
+
+  const handlePersonalityComplete = (answers) => {
+    const bonus = computePersonalityBonus(answers)
+    setPersonalityBonus(bonus)
+    setOriginalOverall(result.overall)
+    const revised = Math.min(99, result.overall + bonus)
+    const cls = classify(revised)
+    setResult((prev) => ({
+      ...prev,
+      overall: revised,
+      classification: cls.label,
+      note: cls.note,
+    }))
+    setHistory((prev) => {
+      const updated = prev.map((h) =>
+        h.caseId === caseId
+          ? { ...h, overall: revised, classification: cls.label }
+          : h
+      )
+      persistHistory(updated)
+      return updated
+    })
+    setScreen('result')
+  }
 
   const restart = () => {
     setPhotoDataUrl(null)
     setResult(null)
     setCaseId(null)
+    setPersonalityBonus(null)
+    setOriginalOverall(null)
     setScreen('intro')
   }
 
@@ -181,8 +217,8 @@ export default function App() {
   }
 
   return (
-    <div className={`app${screen === 'analysis' ? ' analysis-mode' : ''}`}>
-      {screen !== 'analysis' && (
+    <div className={`app${screen === 'analysis' || screen === 'reveal' ? ' analysis-mode' : ''}`}>
+      {screen !== 'analysis' && screen !== 'reveal' && (
         <header className="masthead">
           <div className="crest">⁙ Est · MCMXXIII ⁙</div>
           <h1 className="title">Le Vada</h1>
@@ -223,11 +259,27 @@ export default function App() {
         />
       )}
 
+      {screen === 'reveal' && result && (
+        <ScoreRevealScreen
+          theoryData={result.theoryData}
+          overall={result.overall}
+          classification={result.classification}
+          onComplete={handleRevealComplete}
+        />
+      )}
+
+      {screen === 'personality' && (
+        <PersonalityScreen onComplete={handlePersonalityComplete} />
+      )}
+
       {screen === 'result' && result && (
         <ResultScreen
           caseId={caseId}
           result={result}
           onRestart={restart}
+          onStartPersonality={handleStartPersonality}
+          personalityBonus={personalityBonus}
+          originalOverall={originalOverall}
         />
       )}
     </div>
@@ -528,9 +580,222 @@ function AnalysisScreen({ caseId, photoDataUrl, theoryData, overall, onComplete 
 }
 
 // ============================================================
+// Score Reveal — full-page per theory, then dramatic finale
+// ============================================================
+function ScoreRevealScreen({ theoryData, overall, classification, onComplete }) {
+  // phase: 'cards' → 'buildup' → 'explode'
+  const [phase, setPhase] = useState('cards')
+  const [cardIndex, setCardIndex] = useState(0)
+  const [cardVisible, setCardVisible] = useState(true)
+  const [countingScore, setCountingScore] = useState(0)
+  const [buildupStage, setBuildupStage] = useState(0) // 0-3 for escalating intensity
+
+  // Card auto-advance
+  useEffect(() => {
+    if (phase !== 'cards') return
+    const timers = []
+
+    // Fade out current card after 1.6s
+    timers.push(setTimeout(() => setCardVisible(false), 1600))
+
+    // Advance to next card (or buildup) after 2s
+    timers.push(
+      setTimeout(() => {
+        if (cardIndex < theoryData.length - 1) {
+          setCardIndex((i) => i + 1)
+          setCardVisible(true)
+        } else {
+          setPhase('buildup')
+        }
+      }, 2000)
+    )
+
+    return () => timers.forEach(clearTimeout)
+  }, [phase, cardIndex, theoryData.length])
+
+  // Buildup phase — escalating intensity
+  useEffect(() => {
+    if (phase !== 'buildup') return
+    const timers = []
+    timers.push(setTimeout(() => setBuildupStage(1), 600))
+    timers.push(setTimeout(() => setBuildupStage(2), 1400))
+    timers.push(setTimeout(() => setBuildupStage(3), 2200))
+    timers.push(setTimeout(() => setPhase('explode'), 3000))
+    return () => timers.forEach(clearTimeout)
+  }, [phase])
+
+  // Explode phase — count up the score, then transition
+  useEffect(() => {
+    if (phase !== 'explode') return
+    const duration = 1800
+    const start = performance.now()
+    let raf
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / duration)
+      const eased = 1 - Math.pow(1 - p, 4)
+      setCountingScore(Math.round(eased * overall))
+      if (p < 1) raf = requestAnimationFrame(tick)
+      else setCountingScore(overall)
+    }
+    raf = requestAnimationFrame(tick)
+    const t = setTimeout(() => onComplete(), 4200)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(t)
+    }
+  }, [phase, overall, onComplete])
+
+  const current = theoryData[cardIndex]
+  const scoreColor =
+    current && current.score > 55 ? 'high' : current && current.score > 30 ? 'mid' : 'low'
+
+  return (
+    <section className="reveal">
+      {/* Background burst rings for the finale */}
+      {phase === 'explode' && (
+        <>
+          <div className="burst-ring ring-1" />
+          <div className="burst-ring ring-2" />
+          <div className="burst-ring ring-3" />
+          <div className="burst-particles">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <span
+                key={i}
+                className="burst-particle"
+                style={{
+                  '--angle': `${i * 18}deg`,
+                  '--distance': `${80 + (i % 3) * 40}px`,
+                  '--delay': `${(i % 5) * 0.06}s`,
+                  '--size': `${4 + (i % 4) * 2}px`,
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Counter at top: "3 of 8" */}
+      {phase === 'cards' && (
+        <div className="reveal-counter">
+          {String(cardIndex + 1).padStart(2, '0')} / {String(theoryData.length).padStart(2, '0')}
+        </div>
+      )}
+
+      {/* Individual theory card — full page */}
+      {phase === 'cards' && current && (
+        <div className={`reveal-page${cardVisible ? ' visible' : ''}`} key={cardIndex}>
+          <div className="reveal-page-source">{current.source}</div>
+          <div className="reveal-page-name">{current.name}</div>
+          <div className={`reveal-page-score ${scoreColor}`}>{current.score}</div>
+          <div className="reveal-page-bar">
+            <div
+              className="reveal-page-bar-fill"
+              style={cardVisible ? { width: `${current.score}%` } : undefined}
+            />
+          </div>
+          <div className="reveal-page-blurb">{current.blurb}</div>
+        </div>
+      )}
+
+      {/* Buildup phase */}
+      {phase === 'buildup' && (
+        <div className={`reveal-buildup stage-${buildupStage}`}>
+          <div className="buildup-text">
+            {buildupStage === 0 && 'Compiling subscores\u2026'}
+            {buildupStage === 1 && 'Cross-referencing archive\u2026'}
+            {buildupStage === 2 && 'Consulting Dr. Vernier\u2019s tables\u2026'}
+            {buildupStage === 3 && 'The Institute has reached a verdict.'}
+          </div>
+        </div>
+      )}
+
+      {/* Explode — the big reveal */}
+      {phase === 'explode' && (
+        <div className="reveal-explode">
+          <div className="explode-label">Performance Index</div>
+          <div className="explode-score">{countingScore}</div>
+          <div className="explode-class">{classification}</div>
+        </div>
+      )}
+    </section>
+  )
+}
+
+// ============================================================
+// Personality Test
+// ============================================================
+function PersonalityScreen({ onComplete }) {
+  const [answers, setAnswers] = useState(Array(PERSONALITY_QUESTIONS.length).fill(null))
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
+
+  const allAnswered = answers.every((a) => a !== null)
+
+  const select = (qIndex, value) => {
+    setAnswers((prev) => {
+      const next = [...prev]
+      next[qIndex] = value
+      return next
+    })
+  }
+
+  const handleSubmit = () => {
+    if (!allAnswered) return
+    onComplete(answers)
+  }
+
+  return (
+    <section className="screen">
+      <div className="case-id">Addendum B</div>
+      <h2 className="screen-heading">Supplementary Evaluation</h2>
+      <p className="screen-deck">
+        The following five (5) inquiries probe dimensions of character that
+        somatic assessment cannot reach. Answer truthfully; the Institute
+        reminds the subject that self-flattery is detectable by trained analysts
+        and will be noted in the file.
+      </p>
+
+      {PERSONALITY_QUESTIONS.map((q, qi) => (
+        <div className="pq-card" key={q.id}>
+          <div className="pq-number">
+            {String(qi + 1).padStart(2, '0')}
+          </div>
+          <div className="pq-title">{q.title}</div>
+          <div className="pq-prompt">{q.prompt}</div>
+          <div className="pq-options">
+            {q.options.map((opt, oi) => (
+              <button
+                key={oi}
+                className={`pq-option${answers[qi] === opt.value ? ' selected' : ''}`}
+                onClick={() => select(qi, opt.value)}
+              >
+                <span className="pq-option-letter">
+                  {String.fromCharCode(97 + oi)}
+                </span>
+                {opt.text}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <button
+        className="btn"
+        onClick={handleSubmit}
+        disabled={!allAnswered}
+      >
+        Submit Characterological Evidence →
+      </button>
+    </section>
+  )
+}
+
+// ============================================================
 // Result
 // ============================================================
-function ResultScreen({ caseId, result, onRestart }) {
+function ResultScreen({ caseId, result, onRestart, onStartPersonality, personalityBonus, originalOverall }) {
   const displayRef = useRef(null)
   const captureRef = useRef(null)
   const [displayScore, setDisplayScore] = useState(0)
@@ -635,6 +900,8 @@ function ResultScreen({ caseId, result, onRestart }) {
         result={result}
         cls={cls}
         stamp={stamp}
+        personalityBonus={personalityBonus}
+        originalOverall={originalOverall}
       />
 
       {/* Off-screen clone for crisp image capture */}
@@ -648,8 +915,27 @@ function ResultScreen({ caseId, result, onRestart }) {
           cls={cls}
           stamp={stamp}
           forCapture
+          personalityBonus={personalityBonus}
+          originalOverall={originalOverall}
         />
       </div>
+
+      {result.overall < 60 && personalityBonus === null && (
+        <div className="personality-offer">
+          <div className="personality-offer-heading">Addendum B · Supplementary Evaluation</div>
+          <p className="personality-offer-body">
+            The Institute acknowledges that somatic indices alone cannot capture
+            the full measure of a subject. Certain compensatory virtues —
+            punctuality, composure under duress, competence in written
+            correspondence — may yet elevate the present assessment. A brief
+            characterological supplement is available to those who wish to submit
+            additional evidence.
+          </p>
+          <button className="btn" onClick={onStartPersonality}>
+            Proceed to Supplementary Evaluation →
+          </button>
+        </div>
+      )}
 
       <div className="actions">
         <button className="btn secondary" onClick={onRestart}>
@@ -675,7 +961,7 @@ function ResultScreen({ caseId, result, onRestart }) {
 // Certificate (reusable for both live view + off-screen capture)
 // ============================================================
 const Certificate = forwardRef(function Certificate(
-  { caseId, dateStr, displayScore, result, cls, stamp, forCapture = false },
+  { caseId, dateStr, displayScore, result, cls, stamp, forCapture = false, personalityBonus = null, originalOverall = null },
   ref
 ) {
   return (
@@ -699,6 +985,9 @@ const Certificate = forwardRef(function Certificate(
       <div className="score-display">
         <div className="score-value">{displayScore}</div>
         <div className="score-scale">Performance Index · scale 0–100</div>
+        {personalityBonus !== null && (
+          <div className="cert-addendum">Revised · Addendum B · Characterological Supplement</div>
+        )}
       </div>
 
       <div className="classification">{cls.label}</div>
@@ -722,7 +1011,15 @@ const Certificate = forwardRef(function Certificate(
         ))}
       </div>
 
-      <div className="cert-notes">{cls.note}</div>
+      <div className="cert-notes">
+        {cls.note}
+        {personalityBonus !== null && (
+          <span>
+            {' '}Original somatic index: {originalOverall}. Supplementary characterological
+            evaluation contributed {personalityBonus} points to the revised assessment.
+          </span>
+        )}
+      </div>
 
       <div className="signature-block">
         <div>

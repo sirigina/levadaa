@@ -23,15 +23,23 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body, #root {
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body, #root {
   min-height: 100vh;
   min-height: 100dvh;
+}
+
+html, body, #root {
   background: var(--paper);
   color: var(--ink);
   font-family: 'Newsreader', Georgia, serif;
-  font-size: 16px;
-  line-height: 1.55;
-  overflow-x: hidden;
+  font-size: 18px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overscroll-behavior-y: contain;
@@ -103,8 +111,8 @@ button { font-family: inherit; }
 
 .crest {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.4em;
+  font-size: 13px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 4px;
@@ -125,17 +133,17 @@ button { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 18px;
   color: var(--accent);
   margin-top: 8px;
-  max-width: 320px;
+  max-width: 340px;
   margin-inline: auto;
 }
 
 .institute-meta {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 12px;
@@ -158,8 +166,8 @@ button { font-family: inherit; }
 
 .intro-body {
   font-family: 'Newsreader', serif;
-  font-size: 17px;
-  line-height: 1.65;
+  font-size: 20px;
+  line-height: 1.75;
   margin: 16px 0 22px;
   hyphens: auto;
 }
@@ -186,8 +194,8 @@ button { font-family: inherit; }
 .doctrine-card-heading {
   text-align: center;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.28em;
+  font-size: 13px;
+  letter-spacing: 0.2em;
   margin-bottom: 12px;
   color: var(--accent);
   font-weight: 500;
@@ -197,14 +205,14 @@ button { font-family: inherit; }
 .doctrine-card ul { list-style: none; }
 
 .doctrine-card li {
-  padding: 4px 0;
+  padding: 7px 0;
   border-bottom: 1px dotted rgba(28, 24, 19, 0.25);
   display: flex;
   justify-content: space-between;
   gap: 12px;
   color: var(--ink-soft);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 0.02em;
 }
 
@@ -212,8 +220,8 @@ button { font-family: inherit; }
 
 .doctrine-card li .src {
   color: var(--muted);
-  font-size: 9px;
-  letter-spacing: 0.15em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   align-self: center;
   white-space: nowrap;
@@ -233,8 +241,8 @@ button { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-weight: 700;
   font-style: italic;
-  font-size: 17px;
-  letter-spacing: 0.06em;
+  font-size: 19px;
+  letter-spacing: 0.05em;
   cursor: pointer;
   margin-top: 18px;
   transition: transform 0.14s, box-shadow 0.14s;
@@ -266,7 +274,7 @@ button { font-family: inherit; }
   border: 1px solid var(--ink);
   box-shadow: none;
   padding: 15px 24px;
-  font-size: 14px;
+  font-size: 17px;
 }
 
 .btn.secondary:hover {
@@ -278,13 +286,13 @@ button { font-family: inherit; }
 
 .disclaimer {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  letter-spacing: 0.06em;
   color: var(--muted);
   text-transform: uppercase;
   text-align: center;
   margin-top: 26px;
-  line-height: 1.9;
+  line-height: 1.8;
   padding: 14px 10px;
   border-top: 1px solid var(--muted);
   border-bottom: 1px solid var(--muted);
@@ -292,8 +300,8 @@ button { font-family: inherit; }
 
 .history-toggle {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 14px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   text-align: center;
@@ -313,7 +321,7 @@ button { font-family: inherit; }
 
 .history-empty {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
   text-align: center;
   padding: 10px 0;
@@ -329,7 +337,7 @@ button { font-family: inherit; }
   padding: 10px 0;
   border-bottom: 1px dotted rgba(107, 95, 78, 0.5);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -350,7 +358,7 @@ button { font-family: inherit; }
 
 .history-row .hrow-case { color: var(--ink); }
 
-.history-row .hrow-cls { color: var(--muted); font-size: 9px; margin-top: 2px; }
+.history-row .hrow-cls { color: var(--muted); font-size: 13px; margin-top: 2px; }
 
 .history-row .hrow-score {
   font-family: 'Fraunces', serif;
@@ -366,8 +374,8 @@ button { font-family: inherit; }
   background: none;
   border: none;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   margin: 10px auto 0;
@@ -385,7 +393,7 @@ button { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-style: italic;
   font-weight: 900;
-  font-size: 34px;
+  font-size: 36px;
   margin: 8px 0 12px;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -393,16 +401,16 @@ button { font-family: inherit; }
 
 .screen-deck {
   font-family: 'Newsreader', serif;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 19px;
+  line-height: 1.65;
   margin-bottom: 22px;
   color: var(--ink-soft);
 }
 
 .case-id {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.25em;
+  font-size: 14px;
+  letter-spacing: 0.16em;
   color: var(--accent);
   text-transform: uppercase;
 }
@@ -442,15 +450,15 @@ button { font-family: inherit; }
 .upload-label {
   font-family: 'Fraunces', serif;
   font-weight: 700;
-  font-size: 19px;
+  font-size: 22px;
   margin-top: 14px;
   font-style: italic;
 }
 
 .upload-hint {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 14px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 8px;
@@ -484,8 +492,8 @@ button { font-family: inherit; }
 }
 
 .analysis-header .crest {
-  font-size: 9px;
-  letter-spacing: 0.35em;
+  font-size: 12px;
+  letter-spacing: 0.24em;
   margin-bottom: 2px;
 }
 
@@ -493,15 +501,15 @@ button { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-weight: 900;
   font-style: italic;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .analysis-sub {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   color: var(--muted);
   text-transform: uppercase;
   margin-top: 4px;
@@ -511,19 +519,23 @@ button { font-family: inherit; }
   flex: 0 1 auto;
   position: relative;
   width: 100%;
-  max-height: 38vh;
-  aspect-ratio: 4 / 5;
+  max-height: 35vh;
+  min-height: 0;
   margin: 0 auto;
   background: #000;
   border: 1px solid var(--ink);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .analysis-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-height: 35vh;
+  object-fit: contain;
   filter: grayscale(0.3) contrast(1.08) sepia(0.15) brightness(0.92);
 }
 
@@ -585,7 +597,7 @@ button { font-family: inherit; }
 .measure-tag {
   position: absolute;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
+  font-size: 12px;
   color: #ffd9d9;
   padding: 2px 5px;
   background: rgba(184, 42, 42, 0.82);
@@ -623,7 +635,7 @@ button { font-family: inherit; }
   color: var(--term-green);
   padding: 14px 14px 20px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.7;
   border: 1px solid var(--ink);
   position: relative;
@@ -639,8 +651,8 @@ button { font-family: inherit; }
 .readout-header {
   color: var(--stamp);
   margin-bottom: 10px;
-  letter-spacing: 0.25em;
-  font-size: 9px;
+  letter-spacing: 0.16em;
+  font-size: 12px;
   font-weight: 700;
   padding-bottom: 8px;
   border-bottom: 1px dashed rgba(184, 42, 42, 0.4);
@@ -676,6 +688,296 @@ button { font-family: inherit; }
 @keyframes blink { 50% { opacity: 0; } }
 
 /* =====================================================
+   Score Reveal — full-page per theory + dramatic finale
+   ===================================================== */
+
+.reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+/* ---- card counter ---- */
+
+.reveal-counter {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+/* ---- individual theory page ---- */
+
+.reveal-page {
+  text-align: center;
+  padding: 0 28px;
+  max-width: 480px;
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal-page.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.reveal-page-source {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.reveal-page-name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(24px, 7vw, 32px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.reveal-page-score {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(100px, 30vw, 160px);
+  line-height: 0.82;
+  letter-spacing: -0.06em;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.reveal-page-score.high { color: var(--term-pass); color: #4a8c3f; }
+.reveal-page-score.mid  { color: var(--gold); }
+.reveal-page-score.low  { color: var(--stamp); }
+
+.reveal-page-bar {
+  width: 80%;
+  max-width: 320px;
+  height: 5px;
+  background: rgba(28, 24, 19, 0.1);
+  margin: 0 auto 18px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.reveal-page-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0;
+  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 3px;
+}
+
+.reveal-page-blurb {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+/* ---- buildup phase ---- */
+
+.reveal-buildup {
+  text-align: center;
+  padding: 0 28px;
+}
+
+.buildup-text {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink);
+  animation: buildup-fade 0.6s ease both;
+}
+
+.reveal-buildup.stage-1 .buildup-text {
+  font-size: 24px;
+  animation: buildup-fade 0.5s ease both;
+}
+
+.reveal-buildup.stage-2 .buildup-text {
+  font-size: 26px;
+  color: var(--accent);
+  animation: buildup-pulse 0.4s ease both;
+}
+
+.reveal-buildup.stage-3 .buildup-text {
+  font-size: 28px;
+  color: var(--accent);
+  animation: buildup-shake 0.5s ease both;
+}
+
+@keyframes buildup-fade {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes buildup-pulse {
+  0%   { opacity: 0; transform: scale(0.9); }
+  50%  { transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes buildup-shake {
+  0%   { opacity: 0; transform: translateX(0); }
+  15%  { transform: translateX(-6px); }
+  30%  { transform: translateX(6px); }
+  45%  { transform: translateX(-4px); }
+  60%  { transform: translateX(4px); }
+  75%  { transform: translateX(-2px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ---- explode / finale ---- */
+
+.reveal-explode {
+  text-align: center;
+  padding: 0 28px;
+  z-index: 2;
+  animation: explode-in 0.7s cubic-bezier(0.17, 0.67, 0.32, 1.6) both;
+}
+
+@keyframes explode-in {
+  0%   { opacity: 0; transform: scale(0); }
+  50%  { transform: scale(1.12); }
+  70%  { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.explode-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.explode-score {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(120px, 38vw, 200px);
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  color: var(--accent);
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  text-shadow: 0 4px 30px rgba(122, 28, 44, 0.3);
+}
+
+.explode-class {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 30px);
+  color: var(--ink);
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 3px double var(--ink);
+  display: inline-block;
+}
+
+/* ---- burst rings ---- */
+
+.burst-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+.burst-ring.ring-1 {
+  animation: ring-burst 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both;
+  border-color: var(--accent);
+}
+
+.burst-ring.ring-2 {
+  animation: ring-burst 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both;
+  border-color: var(--gold);
+}
+
+.burst-ring.ring-3 {
+  animation: ring-burst 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
+  border-color: var(--stamp);
+}
+
+@keyframes ring-burst {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.7; border-width: 4px; }
+  100% { transform: translate(-50%, -50%) scale(60); opacity: 0; border-width: 1px; }
+}
+
+/* ---- burst particles ---- */
+
+.burst-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 1;
+}
+
+.burst-particle {
+  position: absolute;
+  width: var(--size, 6px);
+  height: var(--size, 6px);
+  background: var(--accent);
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  animation: particle-fly 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0s) both;
+}
+
+.burst-particle:nth-child(odd)  { background: var(--gold); }
+.burst-particle:nth-child(3n)   { background: var(--stamp); border-radius: 0; }
+.burst-particle:nth-child(5n)   { background: var(--ink); }
+
+@keyframes particle-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translate(
+        calc(cos(var(--angle)) * var(--distance) * 3),
+        calc(sin(var(--angle)) * var(--distance) * 3)
+      )
+      rotate(720deg)
+      scale(0);
+  }
+}
+
+/* =====================================================
    Certificate (result + share capture target)
    ===================================================== */
 
@@ -700,8 +1002,8 @@ button { font-family: inherit; }
 
 .cert-eyebrow {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.32em;
+  font-size: 13px;
+  letter-spacing: 0.2em;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -720,14 +1022,14 @@ button { font-family: inherit; }
 .cert-subtitle {
   font-family: 'Fraunces', serif;
   font-style: italic;
-  font-size: 13px;
+  font-size: 17px;
   color: var(--ink-soft);
 }
 
 .cert-meta {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
+  font-size: 13px;
+  letter-spacing: 0.1em;
   color: var(--muted);
   display: flex;
   justify-content: space-between;
@@ -750,7 +1052,7 @@ button { font-family: inherit; }
 
 .score-scale {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -761,7 +1063,7 @@ button { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-style: italic;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 24px;
   text-align: center;
   color: var(--accent);
   margin: 14px 0 18px;
@@ -780,8 +1082,8 @@ button { font-family: inherit; }
   color: var(--stamp);
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.22em;
+  font-size: 14px;
+  letter-spacing: 0.18em;
   opacity: 0;
   border-radius: 3px;
   pointer-events: none;
@@ -820,7 +1122,7 @@ button { font-family: inherit; }
 
 .theory-name {
   font-family: 'Fraunces', serif;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1.2;
   font-style: italic;
@@ -828,8 +1130,8 @@ button { font-family: inherit; }
 
 .theory-source {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   color: var(--muted);
   text-transform: uppercase;
   margin-top: 3px;
@@ -838,7 +1140,7 @@ button { font-family: inherit; }
 .theory-score {
   font-family: 'Fraunces', serif;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 26px;
   font-style: italic;
   text-align: right;
   align-self: center;
@@ -863,8 +1165,8 @@ button { font-family: inherit; }
 .cert-notes {
   font-family: 'Newsreader', serif;
   font-style: italic;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.6;
   padding: 14px 16px;
   border-left: 3px solid var(--accent);
   background: rgba(122, 28, 44, 0.06);
@@ -880,8 +1182,8 @@ button { font-family: inherit; }
   grid-template-columns: 1fr 1fr;
   gap: 18px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.16em;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -889,7 +1191,7 @@ button { font-family: inherit; }
 .sig-name {
   font-family: 'Fraunces', serif;
   font-style: italic;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink);
   margin-bottom: 4px;
   padding-bottom: 6px;
@@ -903,8 +1205,8 @@ button { font-family: inherit; }
   text-align: center;
   margin-top: 20px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.24em;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   color: var(--muted);
   text-transform: uppercase;
 }
@@ -913,8 +1215,8 @@ button { font-family: inherit; }
   text-align: center;
   margin-top: 8px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
+  font-size: 12px;
+  letter-spacing: 0.12em;
   color: var(--accent);
   text-transform: uppercase;
   opacity: 0.8;
@@ -930,13 +1232,138 @@ button { font-family: inherit; }
 .actions .btn { margin-top: 0; }
 
 /* =====================================================
+   Personality offer panel (result screen)
+   ===================================================== */
+
+.personality-offer {
+  border: 1px solid var(--ink);
+  border-width: 1px 1px 6px 1px;
+  background: rgba(122, 28, 44, 0.04);
+  padding: 22px 20px;
+  margin: 24px 0 4px;
+}
+
+.personality-offer-heading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.personality-offer-body {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* =====================================================
+   Personality test screen
+   ===================================================== */
+
+.pq-card {
+  border: 1px solid var(--ink);
+  border-width: 1px 1px 4px 1px;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 18px 20px;
+  margin: 18px 0;
+}
+
+.pq-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.pq-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--accent);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.pq-prompt {
+  font-family: 'Newsreader', serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+
+.pq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pq-option {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid rgba(28, 24, 19, 0.25);
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Newsreader', serif;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pq-option:hover {
+  background: rgba(122, 28, 44, 0.04);
+  border-color: var(--accent);
+}
+
+.pq-option.selected {
+  background: rgba(122, 28, 44, 0.08);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.pq-option-letter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 16px;
+}
+
+/* =====================================================
+   Certificate addendum line
+   ===================================================== */
+
+.cert-addendum {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 6px;
+}
+
+/* =====================================================
    Small phones
    ===================================================== */
 
 @media (max-width: 380px) {
   .cert-title       { font-size: 36px; }
-  .classification   { font-size: 19px; }
-  .theory-score     { font-size: 20px; }
+  .classification   { font-size: 21px; }
+  .theory-score     { font-size: 22px; }
   .certificate      { padding: 22px 18px; }
 }
 
