@@ -221,7 +221,7 @@ export default function App() {
       {screen !== 'analysis' && screen !== 'reveal' && (
         <header className="masthead">
           <div className="crest">⁙ Est · MCMXXIII ⁙</div>
-          <h1 className="title">Le Vada</h1>
+          <h1 className="title">Le Vadaa?</h1>
           <div className="subtitle">
             Institute of Vascular-Erotic Performance Research
           </div>
@@ -860,8 +860,8 @@ function ResultScreen({ caseId, result, onRestart, onStartPersonality, personali
 
       const shareData = {
         files: [file],
-        title: 'Le Vada Certificate',
-        text: `LE VADA · File № ${caseId} · ${cls.label} · Performance Index ${result.overall}/100`,
+        title: 'Le Vadaa? Certificate',
+        text: `LE VADAA? · File № ${caseId} · ${cls.label} · Performance Index ${result.overall}/100`,
       }
 
       if (navigator.canShare && navigator.canShare(shareData)) {
@@ -968,7 +968,7 @@ const Certificate = forwardRef(function Certificate(
     <div className="certificate" ref={ref}>
       <div className="cert-banner">
         <div className="cert-eyebrow">Certificate of Somatic Assessment</div>
-        <div className="cert-title">Le Vada</div>
+        <div className="cert-title">Le Vadaa?</div>
         <div className="cert-subtitle">
           Institute of Vascular-Erotic Performance Research
         </div>
@@ -1033,7 +1033,7 @@ const Certificate = forwardRef(function Certificate(
       </div>
 
       <div className="cert-footer">
-        — Filed under seal · Le Vada · Geneva · Vienna · Montevideo —
+        — Filed under seal · Le Vadaa? · Geneva · Vienna · Montevideo —
       </div>
       <div className="cert-satire-tag">
         ※ a satirical evaluation ※ no photograph predicts anything ※
