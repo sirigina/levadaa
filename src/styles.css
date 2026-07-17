@@ -466,6 +466,84 @@ button { font-family: inherit; }
 #file-input { display: none; }
 
 /* =====================================================
+   Screening  —  on-device human-subject check
+   ===================================================== */
+
+.screening {
+  text-align: center;
+}
+
+.screening-orbit {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 36px auto 30px;
+}
+
+.screening-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: screening-spin 1.4s linear infinite;
+}
+
+.screening-ring:last-of-type {
+  inset: 18px;
+  border-top-color: var(--gold);
+  animation-duration: 2s;
+  animation-direction: reverse;
+}
+
+.screening-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 34px;
+  color: var(--accent);
+}
+
+@keyframes screening-spin {
+  to { transform: rotate(360deg); }
+}
+
+.screening-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  max-width: 30ch;
+  margin: 0 auto;
+}
+
+/* =====================================================
+   Rejection  —  no human subject found
+   ===================================================== */
+
+.rejection-stamp {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 8px 16px;
+  margin-bottom: 18px;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+}
+
+.rejection .btn { margin-top: 4px; }
+
+/* =====================================================
    Analysis screen  —  FULL VIEWPORT, NO PAGE SCROLL
    ===================================================== */
 

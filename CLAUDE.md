@@ -20,6 +20,7 @@ A satirical single-page React app. User uploads a photo → app "analyzes" it ag
 - `src/main.jsx` — React entry, nothing interesting
 - `src/App.jsx` — all screens (Intro, Upload, Analysis, Result) + Certificate + share logic. One file on purpose.
 - `src/theories.js` — the eight doctrines, classifications, `mulberry32` PRNG, `generateCaseId`
+- `src/faceDetect.js` — on-device human-subject gate. Lazy-loads `@vladmandic/face-api` (its own chunk) + the bundled `tiny_face_detector` model from `public/models/`. Runs before scoring; non-human photos are hard-blocked. Detection is a gate only — scoring stays a deterministic function of the file hash. Fails open if the model can't load.
 - `src/styles.css` — CSS custom properties at top, sections clearly commented
 - `index.html` — Google Fonts (Fraunces, JetBrains Mono, Newsreader) preloaded
 - `vercel.json` — explicit Vite config for Vercel

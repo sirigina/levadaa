@@ -9,6 +9,7 @@ import {
   PERSONALITY_QUESTIONS,
   computePersonalityBonus,
 } from './theories.js'
+import { containsHuman, loadImage } from './faceDetect.js'
 
 // ========== Persistence ==========
 const STORAGE_KEY = 'le-vada:history:v1'
@@ -56,6 +57,14 @@ const hashBytesFromFile = async (file) => {
   return new Uint8Array(hashBuf)
 }
 
+const readFileAsDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.onerror = () => reject(new Error('file read failed'))
+    reader.readAsDataURL(file)
+  })
+
 const todayStamp = () =>
   new Date()
     .toLocaleDateString('en-GB', {
@@ -102,11 +111,27 @@ export default function App() {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = async (e) => {
-      const dataUrl = e.target.result
-      setPhotoDataUrl(dataUrl)
+    const dataUrl = await readFileAsDataUrl(file)
+    setPhotoDataUrl(dataUrl)
 
+    // Human-subject gate. The Institute assesses human subjects only, so an
+    // empty chair (or dog, or landscape) is turned away before scoring. Runs
+    // fully on-device. Fails OPEN: if the detector can't load, we let the
+    // assessment proceed rather than block every subject on a model error.
+    setScreen('screening')
+    let human = true
+    try {
+      const img = await loadImage(dataUrl)
+      human = await containsHuman(img)
+    } catch {
+      human = true
+    }
+    if (!human) {
+      setScreen('rejected')
+      return
+    }
+
+    {
       const hashBytes = await hashBytesFromFile(file)
 
       // Deterministic subscores from the file hash.
@@ -147,7 +172,6 @@ export default function App() {
 
       setScreen('analysis')
     }
-    reader.readAsDataURL(file)
   }
 
   const handleAnalysisComplete = useCallback(async () => {
@@ -245,6 +269,16 @@ export default function App() {
         <UploadScreen
           caseId={caseId}
           onPhoto={handlePhoto}
+          onBack={() => setScreen('intro')}
+        />
+      )}
+
+      {screen === 'screening' && <ScreeningScreen caseId={caseId} />}
+
+      {screen === 'rejected' && (
+        <RejectionScreen
+          caseId={caseId}
+          onRetry={() => setScreen('upload')}
           onBack={() => setScreen('intro')}
         />
       )}
@@ -427,6 +461,55 @@ function UploadScreen({ caseId, onPhoto, onBack }) {
         onChange={(e) => e.target.files[0] && onPhoto(e.target.files[0])}
       />
 
+      <button className="btn secondary" onClick={onBack}>
+        ← Return to Vestibule
+      </button>
+    </section>
+  )
+}
+
+// ============================================================
+// Screening — brief on-device human-subject check
+// ============================================================
+function ScreeningScreen({ caseId }) {
+  return (
+    <section className="screen screening">
+      <div className="case-id">FILE № {caseId}</div>
+      <h2 className="screen-heading">Preliminary Sweep</h2>
+      <div className="screening-orbit" aria-hidden="true">
+        <div className="screening-ring" />
+        <div className="screening-ring" />
+        <div className="screening-mark">❋</div>
+      </div>
+      <p className="screening-status">
+        The optical division is confirming the presence of a human subject
+        within the submitted photograph…
+      </p>
+    </section>
+  )
+}
+
+// ============================================================
+// Rejection — no human subject found (hard block)
+// ============================================================
+function RejectionScreen({ caseId, onRetry, onBack }) {
+  return (
+    <section className="screen rejection">
+      <div className="case-id">FILE № {caseId}</div>
+      <div className="rejection-stamp">No Subject on File</div>
+      <h2 className="screen-heading">Subject Absent</h2>
+      <p className="screen-deck">
+        The optical division has completed its preliminary sweep and detects no
+        human subject within the submitted photograph. The Institute does not,
+        as a matter of long-standing policy, render somatic assessment upon
+        vacant furniture, domestic animals, landscapes, or the middle distance.
+      </p>
+      <p className="screen-deck">
+        Kindly submit a photograph containing a willing human participant.
+      </p>
+      <button className="btn" onClick={onRetry}>
+        Submit Another Photograph →
+      </button>
       <button className="btn secondary" onClick={onBack}>
         ← Return to Vestibule
       </button>
